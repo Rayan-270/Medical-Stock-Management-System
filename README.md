@@ -1,4 +1,4 @@
-# Stockpiled-Medicine-Management-System
+# Medical-Stock-Management-System
 ## Characterizations :
 ### 1- Add medicine 
 ### 2- Sell medicine
