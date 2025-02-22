@@ -11,7 +11,7 @@ public class Medicine2021 {
 	public Medicine2021() {
 		medicines = new ArrayList<>();
 		array = new LastMedicinesUpdate();
-		medicinesInPharmacy = array.gitMedicineArray();
+		medicinesInPharmacy = array.getMedicineArray();
 	}
 	public void printMedicine2021() {
 		

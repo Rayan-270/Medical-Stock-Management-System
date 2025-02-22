@@ -11,7 +11,7 @@ public class SpecifiedMedicinePrice {
 	public SpecifiedMedicinePrice() {
 		array = new LastMedicinesUpdate();
 		medicinesReports = new ArrayList<>();
-		medicinesInPharmacy = array.gitMedicineArray();
+		medicinesInPharmacy = array.getMedicineArray();
 	}
 	public void printMedicinesWithSpecificPrice(double userprice) {
 		for(String medicine : medicinesInPharmacy) {
