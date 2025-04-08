@@ -1,7 +1,5 @@
 package programming;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -16,20 +14,13 @@ static String reorderLimit;
 
 	public static void main(String[] args) throws IOException {
 		Scanner scanner = new Scanner(System.in);
-		SpecifiedMedicinePrice specifiedMedicine = new SpecifiedMedicinePrice();
-		Medicine2021 mediicne2021 = new Medicine2021();
-		FileWriter fileMedicinePrice = new FileWriter("MedicinesAndPrice#.txt" , true);
-		PrintWriter nameAndPrice = new PrintWriter(fileMedicinePrice);
-		FileWriter fileAllMedicine = new FileWriter("Names#.txt" , true);
-		PrintWriter medicineNames = new PrintWriter(fileAllMedicine);
+		PharmacyDatabase pharmacy = new PharmacyDatabase();
 		System.out.println("\t\t\tMedical Stock Management System");
-		Medicine medicine = new Medicine(medicineUniversalName , medicineComName , manufacYear , medicineQuantity , medicinePrice , reorderLimit);
-		AddNewMedicine newMedicine = new AddNewMedicine(medicineUniversalName , medicineComName , manufacYear , medicineQuantity , medicinePrice , reorderLimit);
 		UpdatePrice price = new UpdatePrice();
 		UpdateQuatity quantity = new UpdateQuatity ();
 		SellMedicine sell = new SellMedicine ();
-		Carbage show = new Carbage();
-		LastMedicinesUpdate reports = new LastMedicinesUpdate();
+		Carbage carbage = new Carbage();
+		MedicinesReports reports = new MedicinesReports();
 		boolean loop = true;
 		do {
 			System.out.println("1- Add new medicine\n2- Update medicine\n3- Sell medicine\n4- View repotrs\n\ta. All medicine\n\tb. All medicines with less than or equal to a specified price\n\tc. All expired medicine with year less than 2021\n5- Delet medicine\n6- Exite\n Enter operation number:");
@@ -40,6 +31,7 @@ static String reorderLimit;
 				int newBooksQuantity = scanner.nextInt();
 				for(int i = 1 ; i <= newBooksQuantity ; i++) {
 					scanner.nextLine();
+					System.out.println("\tMedicine number:" + medicineNo);
 					System.out.println("Enter medicine universal name:");
 					medicineUniversalName = scanner.nextLine();
 					System.out.println("Enter medicine commercial name:");
@@ -55,26 +47,28 @@ static String reorderLimit;
 					System.out.println("Enter reorder limit by Days:");
 					reorderLimit = scanner.next();
 					medicineNo ++;
-					nameAndPrice.println(medicineUniversalName +" , "+ medicinePrice);
-					nameAndPrice.flush();
-					medicineNames.println(medicineUniversalName);
-					medicineNames.flush();
-					newMedicine.addMedicineInfo(medicineUniversalName , medicineComName , manufacYear , medicineQuantity , medicinePrice , reorderLimit);
+					Medicine medicine = new Medicine(medicineUniversalName , medicineComName , manufacYear , medicineQuantity , medicinePrice , reorderLimit);
+					pharmacy.saveMedicine(medicineUniversalName, medicineComName, manufacYear, medicineQuantity, medicinePrice, reorderLimit);
+					pharmacy.saveName(medicineComName); 
+					pharmacy.saveNameAndPrice(medicineComName, medicinePrice);
+					if(manufacYear <= 2021) {
+						pharmacy.save2021(medicineUniversalName, medicineComName, manufacYear, medicineQuantity, medicinePrice, reorderLimit);
+					}
 				}
-				System.out.println("Added Sucsessfuly ! ");
+				System.out.println("Added Successfuly ! ");
 				System.out.println();
 			}
 			if (choice == 2) {
 				System.out.println("Enter Medicine Commercial name ");
 				String medicineName = scanner.nextLine();
-				System.out.println("What medicine info you want to update \n1- Price\n2- Quantity");
+				System.out.println("Which medicine's info you want to update? \n1- Price\n2- Quantity");
 				int numberOfChoice = scanner.nextInt();
 				scanner.nextLine();
 				if (numberOfChoice == 1) {
 					System.out.print("Enter new Price:");
 					double newPrice = scanner.nextDouble();
 					price.Update(medicineName, newPrice);
-					System.out.println("Updated Sucsessfuly !");
+					System.out.println("Updated Successfuly !");
 				}
 					
 				else if (numberOfChoice == 2) {
@@ -98,25 +92,30 @@ static String reorderLimit;
 				char letter = scanner.next().charAt(0);
 				if (letter == 'a' || letter == 'A') {
 					ArrayList<String> array  = reports.getMedicineArray();
-					for(int  index = array.size() - 1; index >= 0; index--) {
-						System.out.println(array.get(index));
-						array.remove(index);
+					for(String medicine : array) {
+						System.out.println(medicine);
 					}
 					
 				}
 				else if (letter == 'b' || letter == 'B') {
 					System.out.print("Enter Price :");
 					double requiredPrice = scanner.nextDouble();
-					specifiedMedicine.printMedicinesWithSpecificPrice(requiredPrice);
-				}
+					ArrayList<String> array = reports.getSpecificMedicines(requiredPrice);
+					for(String medicine : array) {
+						System.out.println(medicine);
+					 }
+					}
 				else if (letter == 'c' || letter == 'C') {
-					mediicne2021.printMedicine2021();
+					ArrayList<String> array = reports.getMedicine2021();
+					for(String medicine : array) {
+						System.out.println(medicine);
+					 }
 				}
 			}
 			if (choice == 5) {
-				System.out.print("Enter Medicine Name:");
+				System.out.print("Enter Medicine Universal Name:");
 				String delet = scanner.nextLine();
-				show.deletIt(delet);
+				carbage.deletIt(delet);
 			}
 			if (choice == 6) {
 				System.out.println("Exit the Program .. ");

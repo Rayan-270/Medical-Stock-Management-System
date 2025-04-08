@@ -1,3 +1,4 @@
+
 package programming;
 
 public class Medicine {
@@ -8,6 +9,7 @@ public class Medicine {
 	private double medicineQuantity;
 	private double medicinePrice;
 	private String reorderLimit;
+	private static int medicineNo = 0;
 	
 	public Medicine() {}
 	public Medicine (String medicineUniversalName , String medicineComName , double manufacYear , double medicineQuantity , double medicinePrice , String reorderLimit) {
@@ -55,6 +57,8 @@ public class Medicine {
 	public String getReorderLimit() {
 		return reorderLimit ;
 	}
-	
+	public String toString() {
+		return "medicineNo: " + medicineNo++ + " |medicineUniversalName: "+ medicineUniversalName + " |medicineComName: "+ medicineComName +" |manufacYear: "+ manufacYear + " |medicineQuantity: "+ medicineQuantity + " |medicinePrice: "+ medicinePrice + " |reorderLimit: "+ reorderLimit;
+	}
 	
 }
